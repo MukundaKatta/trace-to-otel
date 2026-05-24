@@ -2,9 +2,9 @@
 
 Two presets:
 
-* ``otel-genai`` — OpenTelemetry GenAI semantic conventions
+* ``otel-genai``: OpenTelemetry GenAI semantic conventions
   (https://opentelemetry.io/docs/specs/semconv/gen-ai/).
-* ``openinference`` — Arize OpenInference conventions
+* ``openinference``: Arize OpenInference conventions
   (https://arize-ai.github.io/openinference/).
 
 The lib intentionally ships hand-rolled tables instead of importing any vendor
