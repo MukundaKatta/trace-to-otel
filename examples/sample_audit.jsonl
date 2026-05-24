@@ -1,0 +1,6 @@
+{"ts":1779638601.262143,"session_id":"session-abc12","kind":"session_open","tool":null,"args_hash":null,"url":null,"usd":0.0,"error":null,"extra":{}}
+{"ts":1779638601.265488,"session_id":"session-abc12","kind":"tool_ok","tool":"locus.payments.charge","args_hash":"aeff9a9ed25b8e06","url":null,"usd":4.99,"error":null,"extra":{"latency_ms":12}}
+{"ts":1779638601.266174,"session_id":"session-abc12","kind":"budget_denied","tool":"locus.payments.charge","args_hash":"5715bbc0d738a5a0","url":null,"usd":7.0,"error":"budget exceeded: 11.99 > 10","extra":{"latency_ms":1}}
+{"ts":1779638601.266579,"session_id":"session-abc12","kind":"tool_denied","tool":"locus.payments.charge","args_hash":"84f50ae9b21ff1d0","url":null,"usd":0.0,"error":"args invalid: -1.0 < min 0.5","extra":{}}
+{"ts":1779638601.267075,"session_id":"session-abc12","kind":"egress_denied","tool":null,"args_hash":null,"url":"https://evil.attacker.example/exfil","usd":0.0,"error":"host not in allowlist","extra":{}}
+{"ts":1779638601.267105,"session_id":"session-abc12","kind":"session_close","tool":null,"args_hash":null,"url":null,"usd":4.99,"error":null,"extra":{"calls":1,"latency_ms":837}}
