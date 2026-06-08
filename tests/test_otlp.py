@@ -11,6 +11,7 @@ import pytest
 from trace_to_otel.jsonl_source import Event
 from trace_to_otel.otlp import (
     OtlpExporter,
+    _hex_pad,
     event_to_span,
     jsonl_to_otlp,
     span_id_for,
@@ -29,6 +30,17 @@ def _attrs_to_dict(attrs):
         v = a["value"]
         out[a["key"]] = next(iter(v.values()))
     return out
+
+
+def test_hex_pad_strips_only_real_prefix_and_preserves_zeros():
+    # A "0x" prefix is dropped, but interior/trailing zeros must be preserved.
+    assert _hex_pad("0xabc123def4567890", 16) == "abc123def4567890"
+    # Leading zeros inside the value must NOT be eaten (the old lstrip bug).
+    assert _hex_pad("00abc123def4567890", 16) == "abc123def4567890"
+    assert _hex_pad("0x00abc123def45678", 16) == "0x00abc123def45678"[2:]
+    # Short values are left-padded with zeros to the requested width.
+    assert _hex_pad("ff", 16) == "0000000000000000"[:-2] + "ff"
+    assert len(_hex_pad("ff", 16)) == 16
 
 
 def test_trace_id_is_32_hex_and_stable():
@@ -141,7 +153,7 @@ def test_exporter_rejects_unknown_semconv():
 def test_jsonl_to_otlp_writes_valid_json(tmp_path: Path):
     src = tmp_path / "audit.jsonl"
     src.write_text(
-        '\n'.join(
+        "\n".join(
             [
                 '{"session_id": "s1", "kind": "session_open", "ts": 1.0}',
                 '{"session_id": "s1", "kind": "tool_ok", "tool": "x", "ts": 2.0, "usd": 0.1, "extra": {"latency_ms": 5}}',

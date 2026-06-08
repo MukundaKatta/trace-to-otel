@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import pytest
 
 from trace_to_otel.jsonl_source import (
     Event,
@@ -117,7 +116,7 @@ def test_parse_agent_step_log_uses_step_as_kind():
 def test_jsonl_source_reads_real_file(tmp_path: Path):
     f = tmp_path / "log.jsonl"
     f.write_text(
-        '\n'.join(
+        "\n".join(
             [
                 '{"session_id": "s1", "kind": "session_open", "ts": 1.0}',
                 '{"session_id": "s1", "kind": "tool_ok", "tool": "x", "ts": 2.0, "usd": 0.1}',
@@ -133,9 +132,7 @@ def test_jsonl_source_reads_real_file(tmp_path: Path):
 
 def test_jsonl_source_session_key_override(tmp_path: Path):
     f = tmp_path / "log.jsonl"
-    f.write_text(
-        json.dumps({"my_run": "run-7", "kind": "tool_ok", "tool": "x"}) + "\n"
-    )
+    f.write_text(json.dumps({"my_run": "run-7", "kind": "tool_ok", "tool": "x"}) + "\n")
     src = JsonlSource(f, session_key="my_run")
     events = src.events()
     assert events[0].session_id == "run-7"

@@ -34,14 +34,16 @@ _URL_KEYS = ("url", "endpoint", "host")
 
 # Kinds that mean "something the agent tried got blocked" so the OTLP status
 # code should be ERROR even if no error string was provided.
-_DENIED_KINDS = frozenset({
-    "tool_denied",
-    "budget_denied",
-    "egress_denied",
-    "policy_denied",
-    "rate_limited",
-    "blocked",
-})
+_DENIED_KINDS = frozenset(
+    {
+        "tool_denied",
+        "budget_denied",
+        "egress_denied",
+        "policy_denied",
+        "rate_limited",
+        "blocked",
+    }
+)
 
 
 @dataclass
@@ -123,7 +125,11 @@ def _explode_agentsnap(record: dict[str, Any]) -> list[Event]:
     out: list[Event] = []
     session = _to_str(_first(record, _SESSION_KEYS)) or _to_str(record.get("name"))
     if session:
-        out.append(normalize({"kind": "session_open", "session_id": session, "ts": record.get("ts")}))
+        out.append(
+            normalize(
+                {"kind": "session_open", "session_id": session, "ts": record.get("ts")}
+            )
+        )
     for step in record.get("steps") or []:
         if not isinstance(step, dict):
             continue
@@ -144,7 +150,9 @@ def parse_lines(lines: Iterable[str]) -> list[Event]:
         try:
             obj = json.loads(line)
         except json.JSONDecodeError:
-            events.append(Event(raw={"_raw": line}, kind="parse_error", error="invalid json"))
+            events.append(
+                Event(raw={"_raw": line}, kind="parse_error", error="invalid json")
+            )
             continue
         if isinstance(obj, dict) and isinstance(obj.get("steps"), list):
             events.extend(_explode_agentsnap(obj))

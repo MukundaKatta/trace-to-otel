@@ -25,7 +25,12 @@ _LIB_VERSION = "0.1.0"
 
 
 def _hex_pad(s: str, width: int) -> str:
-    s = s.lstrip("0x").lower()
+    # Strip an optional "0x"/"0X" prefix only. Using str.lstrip("0x") here would
+    # be a bug: it strips *any* leading run of '0' and 'x' characters, which can
+    # silently mangle a hex string that happens to start with zeros.
+    s = s.lower()
+    if s.startswith("0x"):
+        s = s[2:]
     if len(s) >= width:
         return s[-width:]
     return s.rjust(width, "0")
